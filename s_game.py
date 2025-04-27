@@ -242,10 +242,11 @@ def game():
             if e.type == QUIT:
                 game = False
                 # screen_flag = True
-            elif e.type == KEYDOWN and patrons != 0:
+            elif e.type == KEYDOWN and patrons != 0: #and (int(current_time) - int(start_time))/1000 >= 50:
                 if e.key == K_SPACE:
                     fire.play()
                     player.FIRE()
+                    start_time = current_time
         if finish != True:
             FLAG = True
             # screen_flag = False
