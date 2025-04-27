@@ -1,15 +1,19 @@
-from shooter_game import game
+from s_game import game, FLAG, about
 from pygame import *
 import pygame
 import sys
 # from time import 
 from random import randint
 
-
+# музыка
 mixer.init()
 mixer.music.load('menu_music.ogg')
 mixer.music.set_volume(0.2)
 mixer.music.play()
+# if FLAG == True:
+#     mixer.music.pause()
+# elif FLAG == False:
+#     mixer.music.unpause()
 
 def draw_text(text, size, x, y):
     font = pygame.font.SysFont('Arial', size)
@@ -28,15 +32,15 @@ WHITE = (255, 255, 255)
 RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 BLUE = (66,170,255)
+screen_flag = True
 
 # Настройка дисплея
 screen = display.set_mode((WIDTH, HEIGHT))
 display.set_caption("Шутер")
 
 clock = time.Clock()
-screen_flag = True
 
-while True:
+while screen_flag!= False:
     for e in event.get():
         if e.type == QUIT:
             pygame.quit()
