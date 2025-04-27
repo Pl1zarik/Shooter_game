@@ -37,6 +37,7 @@ screen_flag = True
 # Настройка дисплея
 screen = display.set_mode((WIDTH, HEIGHT))
 display.set_caption("Шутер")
+back = transform.scale(image.load('back_menu.jpg'), (WIDTH, HEIGHT))
 
 clock = time.Clock()
 
@@ -51,20 +52,22 @@ while screen_flag!= False:
             if e.button == 1:
                 click = True
     
-    screen.fill(WHITE)
+    # screen.fill(WHITE)
+    screen.blit(back, (0, 0))
     draw_text("Добро пожаловать!", 40, WIDTH/2, HEIGHT/4)
     mx, my = mouse.get_pos()
-    button_1 = Rect(WIDTH/2 - 70, HEIGHT/2, 140, 50)
-    button_2 = Rect(WIDTH/2 - 70, HEIGHT/2 + 60, 140, 50)
+    button_1 = Rect(WIDTH/2 - 70, HEIGHT/2 + 150, 140, 50)
+    button_2 = Rect(WIDTH/2 - 70, HEIGHT/2 + 150 + 60, 140, 50)
     if button_1.collidepoint((mx, my)):
         if click: game()
+        # finish = False
     if button_2.collidepoint((mx, my)):
         if click: about()
 
     draw.rect(screen, GREEN, button_1)
     draw.rect(screen, BLUE, button_2)
-    draw_text("Play", 30, WIDTH/2, HEIGHT/2 + 25)
-    draw_text("About", 30, WIDTH/2, HEIGHT/2 + 85)
+    draw_text("Play", 30, WIDTH/2, HEIGHT/2 + 175)
+    draw_text("About", 30, WIDTH/2, HEIGHT/2 + 235)
     click = False
     display.flip()
     clock.tick(60)

@@ -3,12 +3,14 @@ from time import time as timer
 import pygame
 from pygame import *
 from random import randint
+from time import perf_counter
 # константы
 patrons = 20
 health = 100
 W = 800
 H = 600
 screen_flag = True
+
 
 # настройки окна
 # pygame.init()
@@ -62,13 +64,20 @@ class Bullet(GameSprite):
         self.rect.y -= self.speed
         if self.rect.y < 0:
             self.kill()
+class Boss(GameSprite):
+    def update(self):
+        self.rect.x += self.speed
+        if self.rect.x >= 700:
+            self.rect.x -= self.speed
+        if self.rect.x <= 50:
+            self.rect.x += self.speed
 
 
 #Музыка
 mixer.init()
 mixer.music.load('space.ogg')
 mixer.music.play()
-fire = mixer.Sound('fire.ogg')
+fire = mixer.Sound('laser-blast.ogg')
 
 # текст
 font.init()
@@ -85,7 +94,7 @@ asteroid_max = 2 # колл-во астероидов на экране
 boosts_max = 1 # колл-во бустов на экране
 # группы и спрайты
 player = Player('rocket_100hp.png', W//2, H - 130, 100, 120, 5)
-
+boss = Boss('boss.png', W//2, H - 130, 100, 120, 5)
 monsters = sprite.Group()
 for i in range(monsters_max):
     monster = Enemy('ufo.png', randint(80, W - 80), -40, 80, 50, randint(1,2))
@@ -127,6 +136,7 @@ def move_sprites():
     boosts_cartridges.update()
     boosts_health.update()
     bullets.update()
+    # boss.update()
 
 # столкновение групп
 def collide_group():
@@ -155,7 +165,7 @@ def collide_group():
     for m in cartridge:
         patron_png = Sprites('cartridges.png', randint(80, W - 80), -40, 80, 50, randint(1,5))
         boosts_cartridges.add(patron_png)
-        patrons += 10
+        patrons += 5
     
     lost_list = sprite.spritecollide(player, monsters, True)
     for c in lost_list:
@@ -206,15 +216,11 @@ def ifs():
 
 
     
-    # if True:
-    #     time.set_timer(pygame.USEREVENT, 15)
-    #     boss_flag = False
-
+    
     # if boss_flag != True:
     #     sprite.Group.empty(monsters) 
     #     sprite.Group.empty(no_break_monsters)
-    #     boss_flag = True
-    
+
 
 img1 = transform.scale(image.load('rocket_100hp.png'), (100, 120))
 img2 = transform.scale(image.load('rocket_75hp.png'), (100, 120))
@@ -225,25 +231,24 @@ img4 = transform.scale(image.load('rocket_25hp.png'), (130, 150))
 
 FLAG = False
 def game():
-    global lost, score, FLAG, health, current_time, start_time
+    global lost, score, FLAG, health, current_time, start_time, finish
 
     ####################
-    start_time = timer()
+    start_time = perf_counter()
     ####################
     
-    
+    finish = False
     # игровой цикл
     clock = time.Clock()
     game = True
-    finish = False
     while game:
         current_time = timer()
         for e in event.get():
             if e.type == QUIT:
                 game = False
                 # screen_flag = True
-            elif e.type == KEYDOWN and patrons != 0: #and (int(current_time) - int(start_time))/1000 >= 50:
-                if e.key == K_SPACE:
+            elif e.type == KEYDOWN:
+                if e.key == K_SPACE and patrons != 0 and float(current_time) - float(start_time) >= 0.50:
                     fire.play()
                     player.FIRE()
                     start_time = current_time
@@ -253,6 +258,7 @@ def game():
             # отрисовка
             draw_sprite()
             player.reset()
+            # boss.reset()
 
             # движение
             move_sprites()
@@ -270,10 +276,9 @@ def game():
                 health = 0 
                 main_win.blit(u_lose, (W//2 - 80, H//2 - 20))
                 finish = True
-            if int(current_time) - int(start_time) == 30:
-                print(int(current_time-start_time))
-                start_time = current_time
-
+            # if int(current_time) - int(start_time) == 30:
+            #     # print(int(current_time-start_time))
+            #     # start_time = current_time
         clock.tick(FPS)
         display.update()
 
