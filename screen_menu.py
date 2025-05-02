@@ -1,4 +1,4 @@
-from s_game import game, FLAG, about
+from s_game import game, FLAG, about, finish
 from pygame import *
 import pygame
 import sys
@@ -7,6 +7,7 @@ from random import randint
 
 # музыка
 mixer.init()
+game_music = mixer.Sound('space.ogg')
 mixer.music.load('menu_music.ogg')
 mixer.music.set_volume(0.2)
 mixer.music.play()
@@ -60,7 +61,8 @@ while screen_flag!= False:
     button_2 = Rect(WIDTH/2 - 70, HEIGHT/2 + 150 + 60, 140, 50)
     if button_1.collidepoint((mx, my)):
         if click: game()
-        # finish = False
+        finish = False
+        # game_music.play()
     if button_2.collidepoint((mx, my)):
         if click: about()
 

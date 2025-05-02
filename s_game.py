@@ -10,7 +10,10 @@ health = 100
 W = 800
 H = 600
 screen_flag = True
-
+finish = False
+time_boss = 60
+boss_lost = 40
+# boss_speed_x = 5
 
 # настройки окна
 # pygame.init()
@@ -64,14 +67,12 @@ class Bullet(GameSprite):
         self.rect.y -= self.speed
         if self.rect.y < 0:
             self.kill()
-class Boss(GameSprite):
-    def update(self):
-        self.rect.x += self.speed
-        if self.rect.x >= 700:
-            self.rect.x -= self.speed
-        if self.rect.x <= 50:
-            self.rect.x += self.speed
-
+# class Boss(GameSprite):
+#     def update(self):
+#         if boss.rect.x > W - 100: #or ball.rect.y < 0
+#             boss_speed_x *= -1
+#         if boss.rect.x < W - 700: #or ball.rect.y < 0
+#             boss_speed_x *= -1
 
 #Музыка
 mixer.init()
@@ -94,10 +95,10 @@ asteroid_max = 2 # колл-во астероидов на экране
 boosts_max = 1 # колл-во бустов на экране
 # группы и спрайты
 player = Player('rocket_100hp.png', W//2, H - 130, 100, 120, 5)
-boss = Boss('boss.png', W//2, H - 130, 100, 120, 5)
+# boss = Boss('boss.png', W//2, H - 130, 100, 120, 5)
 monsters = sprite.Group()
 for i in range(monsters_max):
-    monster = Enemy('ufo.png', randint(80, W - 80), -40, 80, 50, randint(1,2))
+    monster = Enemy('ufo.png', randint(80, W - 80), -40, 80, 50, randint(1,3))
     monsters.add(monster)
 
 no_break_monsters = sprite.Group()
@@ -106,11 +107,10 @@ for i in range(asteroid_max):
     no_break_monsters.add(asteroid)
 
 boosts_health = sprite.Group()
+
 for i in range(boosts_max):
     health_png = Sprites('health.png', randint(80, W - 80), -40, 80, 50, randint(1,5))
-    # patron_png = Sprites('cartridges.png', randint(80, W - 80), -40, 80, 50, randint(1,5))
     boosts_health.add(health_png)
-    # boosts.add(patron_png)
 
 boosts_cartridges = sprite.Group()
 for i in range(boosts_max):
@@ -231,10 +231,11 @@ img4 = transform.scale(image.load('rocket_25hp.png'), (130, 150))
 
 FLAG = False
 def game():
-    global lost, score, FLAG, health, current_time, start_time, finish
+    global lost, score, FLAG, health, current_time, start_time, finish, time_boss, boss_lost
 
     ####################
     start_time = perf_counter()
+    boss_and_speed_time = timer()
     ####################
     
     finish = False
@@ -250,11 +251,11 @@ def game():
             elif e.type == KEYDOWN:
                 if e.key == K_SPACE and patrons != 0 and float(current_time) - float(start_time) >= 0.50:
                     fire.play()
+                    # mixer.fire.set_volume(0.2)
                     player.FIRE()
                     start_time = current_time
         if finish != True:
             FLAG = True
-            # screen_flag = False
             # отрисовка
             draw_sprite()
             player.reset()
@@ -276,9 +277,18 @@ def game():
                 health = 0 
                 main_win.blit(u_lose, (W//2 - 80, H//2 - 20))
                 finish = True
-            # if int(current_time) - int(start_time) == 30:
-            #     # print(int(current_time-start_time))
-            #     # start_time = current_time
+            # if int(current_time) - int(boss_and_speed_time) == time_boss or lost >= boss_lost:
+            #     print(int(current_time-boss_and_speed_time))
+            #     boss_and_speed_time = current_time
+            #     sprite.Group.empty(monsters) 
+            #     sprite.Group.empty(no_break_monsters)
+            #     time_boss += current_time
+            #     time_boss *= 1.5
+            #     boss_lost += lost
+            #     boss_lost *= 1.5
+
+
+
         clock.tick(FPS)
         display.update()
 
