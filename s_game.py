@@ -292,5 +292,5 @@ def game():
         clock.tick(FPS)
         display.update()
 
-def about():
-    print('Работает!')
+# def about():
+#     print('Работает!')
