@@ -8,7 +8,7 @@ WHITE = (255, 255, 255)
 RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 BLUE = (66,170,255)
-screen_flag = True
+
 FPS = 60
 
 # Настройка дисплея
@@ -18,14 +18,13 @@ back = transform.scale(image.load('back_about.png'), (WIDTH, HEIGHT))
 
 
 def about():
-
+    screen_flag = True
     clock = time.Clock()
 
-    while screen_flag!= False:
+    while screen_flag:
         for e in event.get():
             if e.type == QUIT:
-                pygame.quit()
-                sys.exit()
+                screen_flag = False
     
         main_win.blit(back, (0, 0))
         display.flip()
