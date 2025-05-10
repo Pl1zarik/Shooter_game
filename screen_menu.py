@@ -1,4 +1,4 @@
-from s_game import game, FLAG, finish  # , about
+from s_game import game, FLAG, finish, new_start# , about
 from about import about
 from pygame import *
 import pygame
@@ -57,6 +57,7 @@ screen = display.set_mode((WIDTH, HEIGHT))
 display.set_caption("Шутер")
 
 is_play_music = False
+click = False
 
 clock = time.Clock()
 while screen_flag:
@@ -88,6 +89,7 @@ while screen_flag:
         if click:
             mixer.music.stop()
             is_play_music = False
+            new_start()
             game()
         # finish = False
     if button_2.collidepoint((mx, my)):

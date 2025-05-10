@@ -95,7 +95,10 @@ asteroid_max = 2 # колл-во астероидов на экране
 boosts_max = 1 # колл-во бустов на экране
 # группы и спрайты
 player = Player('rocket_100hp.png', W//2, H - 130, 100, 120, 5)
+bullets = sprite.Group()
+
 # boss = Boss('boss.png', W//2, H - 130, 100, 120, 5)
+
 monsters = sprite.Group()
 for i in range(monsters_max):
     monster = Enemy('ufo.png', randint(80, W - 80), -40, 80, 50, randint(1,3))
@@ -117,7 +120,28 @@ for i in range(boosts_max):
     patron_png = Sprites('cartridges.png', randint(80, W - 80), -40, 80, 50, randint(1,5))
     boosts_cartridges.add(patron_png)
 
-bullets = sprite.Group()
+
+
+
+
+
+
+
+def new_start():
+    finish = False
+    time_boss = 60
+    boss_lost = 40
+    lost = 0
+    score = 0
+    patrons = 20
+    health = 100
+    # sprite.Group.empty(monsters) 
+    # sprite.Group.empty(no_break_monsters)
+    # sprite.Group.empty(boosts_health)
+    # sprite.Group.empty(boosts_cartridges)
+    player = Player('rocket_100hp.png', W//2, H - 130, 100, 120, 5)
+
+
 
 # отрисовка спрайтов
 def draw_sprite():
@@ -232,12 +256,11 @@ img4 = transform.scale(image.load('rocket_25hp.png'), (130, 150))
 FLAG = False
 def game():
     global lost, score, FLAG, health, current_time, start_time, finish, time_boss, boss_lost
-
     ####################
     start_time = perf_counter()
     boss_and_speed_time = timer()
     ####################
-    
+
     finish = False
     # игровой цикл
     clock = time.Clock()
